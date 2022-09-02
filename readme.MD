@@ -24,18 +24,42 @@ Use the url like this to open the websocket:
 Send the first message to WS as:
 >Bearer *access_token*
 
-Use the same access_token as with other parts of the site -- received after POST to login endpoint.
+Use the same access_token as with other parts of the site -- received after POST to login endpoint. After registration.
+
+#### site register:
+POST to: 
+>/auth/register
+> 
+>{
+  "email": "mail@mail.com",
+  "password": "123",
+  "repeat_password": "123"
+} 
+
+
+#### site login:
+POST to /auth/login:
+>{
+  "email": "mail@mail.com",
+  "password": "123"
+}
+
+and get the access_token.
 
 ## chat history
-Sent to websocket once you authorize - in the form of the list of the message objects. Each of the messages have the field 'type' (see message types). 
+Sent to websocket once you authorize - in the form of the list of the message objects. Each of the messages have the field 'type' (see below). 
 
 ## message types
 There are three types of messages: **text**, **smile**, **file**.
 Which when received look like these:
 
--   {"id": 87, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:27:34.857355", "type": "text", "text": "Hello, world!"}
--   {"id": 88, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:27:49.783958", "type": "smile", "smile_id": 2, "smile_file_uuid": "b1d24593-9166-408a-bf68-a8f7be00e181"}
--   {"id": 89, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:29:23.598871", "type": "file", "file_uuid": "84d8a07a-67ca-4d92-8d1e-f5e646b72fb7", "text": "Here's the file!"}
+
+> -   {"id": 87, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:27:34.857355", "type": "text", "text": "Hello, world!"}
+ 
+
+>  -   {"id": 88, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:27:49.783958", "type": "smile", "smile_id": 2, "smile_file_uuid": "b1d24593-9166-408a-bf68-a8f7be00e181"}
+
+>  -   {"id": 89, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:29:23.598871", "type": "file", "file_uuid": "84d8a07a-67ca-4d92-8d1e-f5e646b72fb7", "text": "Here's the file!"}
 
 
 ## message sending
