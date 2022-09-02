@@ -4,23 +4,22 @@
      
 
 ## General flow
-Here is the desciption of the general flow, each of the steps is described in more detail after in the subtopics that follow. Lastly, there is working example page (html + js) useful for testing and reference.
+Here is the description of the general flow, each of the steps is described in more detail in the subtopics that follow. Lastly, there is a working example page (html + js) useful for testing and reference.
 
 Steps:
-- open websocket by url containing *other_member_id* - the one you want to open the chat with
+- open the websocket by url containing the *other_member_id* - the one you want to open the chat with
 - authorize by sending the access_token in the first message
-- if authorization is successful you will get the response with the chat history -- as the list of messages (json) in predefined format
+- if authorization is successful you will get the response with the chat history -- as the list of messages (json) in predefined format (detailed below)
 - if auth is unsuccessful - websocket is closed
-- history is sent back to you
 - send/receive messages in real time to/from the open socket; if the other member is offline - messages are saved in the history and will be delivered as soon as the other member logins
 - if any erros occur after authorization (incorrect msg format, file not found, etc.) - they will be sent to websocket as json with error description, web socket is NOT closed in this case
 - closed tab/browser closes the socket
 
-## url 
+## URL 
 Use the url like this to open the websocket:
 >	ws://localhost:8000/members/chat/?other_member_id={other_member_id}
 
-## authorizaiton
+## Authorizaiton
 Send the first message to WS as:
 >Bearer *access_token*
 
@@ -46,10 +45,10 @@ POST to /auth/login:
 
 and get the access_token.
 
-## chat history
-Sent to websocket once you authorize - in the form of the list of the message objects. Each of the messages have the field 'type' (see below). 
+## Chat history
+The history of the current chat is sent to you as a response message to the successful authorization. It is in the form of the list of the message objects. Each of the messages have the field 'type' (see below). 
 
-## message types
+## Message types
 There are three types of messages: **text**, **smile**, **file**.
 Which when received look like these:
 
@@ -62,7 +61,20 @@ Which when received look like these:
 >  -   {"id": 89, "member_id": 1, "chat_id": 2, "date": "2022-09-02T15:29:23.598871", "type": "file", "file_uuid": "84d8a07a-67ca-4d92-8d1e-f5e646b72fb7", "text": "Here's the file!"}
 
 
-## message sending
+There are some fields that are only seen when the message is received.
+You don't need all of them to create and send a message (see below).
+Notes on fields:
+- member_id - the id of the member who sent the message;
+- chat_id - the id of the chat between these two members (authorized one and the one set by other_member_id query in the url). May be of no use to the frontend;
+- smile_file_uuid and file_uuid are needed to download the file and present it to the user (you don't need them when creating a message, see below)
+
+### How to get the file by uuid ('smile' file or any other)
+
+> GET /storage?uuid=9be4aa0c-c820-4edc-b86e-7fe5fdbc49b6
+
+
+
+## Message sending
 Each type has its format and has some requirements.
 - ### text
 Just send to the open websocket the message of explicit type or plain text which will be considered text format as well:
@@ -75,17 +87,17 @@ Or
 
 - ### smile
 Send to the open websocket:
-> -   {"type": "smile", "smile_id": 2}
+>    {"type": "smile", "smile_id": 2}
 
-Smile must exist. To create a smile, upload any image and get its id:
-: POST file as a superuser to */storage/smiles* (as 'form-data' with field name = 'file')
+Smile must exist. To create a smile, upload any image as a superuser to this endpoint and get its id:
+: POST */storage/smiles* (as 'form-data' with field name = 'file')
 &nbsp;
 
 -  ### file
-Sending of files is a bit more complex as we cannot send them in json, nor do the websockets have forms like http.
-In essence, frontend codes the needed file info + message (if any) and combines it with the file data in order to send the resulting byte stream to the socket in one go. The example JS code is included below. Full example is at the end.
+Sending of files is a bit more complex as we cannot send them in JSON, nor do the websockets have forms like HTTP.
+In essence, the frontend codes the needed file info + message (if any) and combines it with the file data in order to send the resulting bytes to the socket in one go. The example JS code is included below. Full example is at the end.
 Can be with or without text attached to them.
-Size limitation checked at backed (default = 5 000 000 bytes)
+Size limitation checked at backed (default = 5 000 000 bytes).
 
     function sendFile() {
                 var file = document.getElementById('filename').files[0];
@@ -123,8 +135,9 @@ Size limitation checked at backed (default = 5 000 000 bytes)
             reader.readAsArrayBuffer(file);
         }
 
-## message pricing 
-Ensure the  users have some balance for chat testing OR they're superusers/employees/premium users.
+## Message pricing
+
+Ensure the users have some balance for chat testing OR they're superusers/employees/premium users.
 For ordinary users smiles have custom price for each, other message types have the  default price of 5 coins.
 
 
