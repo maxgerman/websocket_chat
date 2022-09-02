@@ -247,4 +247,4 @@ For ordinary users smiles have custom price for each, other message types have t
 
      
 ## Questions
-t.me/Max_G
+http://t.me/Max_G
