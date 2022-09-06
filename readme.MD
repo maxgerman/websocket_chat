@@ -72,7 +72,15 @@ Notes on fields:
 
 > GET /storage?uuid=9be4aa0c-c820-4edc-b86e-7fe5fdbc49b6
 
+## Error handling
+Chat errors will be presented as messages of additional type 'error', with description in 'text'. Auth errors will close the socket, so you'll 
+have to reopen it. Any other errors won't. These only look like messages, naturally they're only for one party and not saved to the database.
 
+#### auth error example:
+> {"type": "error", "text": "Authentication error: First message must start with Bearer"}
+
+#### other chat errors example:
+> {"type": "error", "text": "smile_id must be provided"}
 
 ## Message sending
 Each type has its format and has some requirements.
