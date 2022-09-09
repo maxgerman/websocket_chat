@@ -17,7 +17,7 @@ Steps:
 
 ## URL 
 Use the url like this to open the websocket:
->	ws://localhost:8000/members/chat/?other_member_id={other_member_id}
+>	ws://localhost:8000/chat/?other_member_id={other_member_id}
 
 ## Authorizaiton
 Send the first message to WS as:
@@ -214,7 +214,7 @@ For ordinary users smiles have custom price for each, other message types have t
                 function openWs(event) {
                     
                     var other_member_id = document.querySelector("#other_member_id").value;
-                    window.ws = new WebSocket(`ws://localhost:8000/members/chat/?other_member_id=${other_member_id}`);
+                    window.ws = new WebSocket(`ws://localhost:8000/chat/?other_member_id=${other_member_id}`);
                     
                    ws.onmessage = function(event) {
                     var messages = document.getElementById('messages')
@@ -291,5 +291,16 @@ For ordinary users smiles have custom price for each, other message types have t
     </html>
 
      
+## Message templates
+Employee users can save, get and delete message templates from the database:
+
+> GET /chat/message_templates/
+> > "templates": [ { "template_id": 1, "text": "some saved text"}, ...]
+> 
+> POST /chat/message_templates/
+> >{"text": "A new template"}
+> 
+> DELETE /chat/message_templates/{id}
+
 ## Questions
 http://t.me/Max_G
