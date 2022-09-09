@@ -70,7 +70,9 @@ Notes on fields:
 
 ### How to get the file by uuid ('smile' file or any other)
 
-> GET /storage?uuid=9be4aa0c-c820-4edc-b86e-7fe5fdbc49b6
+ GET /storage/<file_uuid>
+ 
+> GET /storage/9be4aa0c-c820-4edc-b86e-7fe5fdbc49b6
 
 ## Error handling
 Chat errors will be presented as messages of additional type 'error', with description in 'text'. Auth errors will close the socket, so you'll 
