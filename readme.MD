@@ -7,8 +7,9 @@
 Here is the description of the general flow, each of the steps is described in more detail in the subtopics that follow. Lastly, there is a working example page (html + js) useful for testing and reference.
 
 Steps:
+- you must be registered, must have member created (see Authorization section), and must have a valid access token
 - open the websocket by url containing the *other_member_id* - the one you want to open the chat with
-- authorize by sending the access_token in the first message
+- authorize by sending the "Bearer " + access_token in the first message
 - if authorization is successful you will get the response with the chat history -- as the list of messages (json) in predefined format (detailed below)
 - if auth is unsuccessful - websocket is closed
 - send/receive messages in real time to/from the open socket; if the other member is offline - messages are saved in the history and will be delivered as soon as the other member logins
@@ -25,7 +26,7 @@ Send the first message to WS as:
 
 Use the same access_token as with other parts of the site -- received after POST to login endpoint. After registration.
 
-#### site register:
+### site register:
 POST to: 
 >/auth/register
 > 
@@ -35,9 +36,42 @@ POST to:
   "repeat_password": "123"
 } 
 
+you'll get the token after registration, but to renew it use the login endpoint (see below)
 
-#### site login:
-POST to /auth/login:
+
+### create a member:
+This will be done once for a user
+
+POST to:
+>/members/
+> 
+> {
+    "age": "25",
+    "is_bot": false,
+    "name": "Vasyl",
+    "gender": "male",
+    "search_gender": "female",
+    "city": "Kyiv",
+    "country": "Ukraine"
+}
+
+you'll receive member_id (it's not the same as user_id) and other member info:
+>
+>{
+    "id": 10,
+    "name": "Vasyl",
+    "image_id": "uuid...",
+    "age": 25,
+    "gender": "male",
+    "search_gender": "female",
+    "user_id": 5,
+    "city": "Kyiv",
+    "country": "Ukraine"
+}
+
+### site login:
+>POST to /auth/login:
+> 
 >{
   "email": "mail@mail.com",
   "password": "123"
