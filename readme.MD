@@ -47,7 +47,6 @@ POST to:
 > 
 > {
     "age": "25",
-    "is_bot": false,
     "name": "Vasyl",
     "gender": "male",
     "search_gender": "female",
