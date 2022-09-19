@@ -329,10 +329,10 @@ For ordinary users smiles have custom price for each, other message types have t
 ## Message templates
 Employee users can save, get and delete message templates from the database:
 
-> GET /chat/message_templates/
+> GET /chat/message_templates
 > > "templates": [ { "template_id": 1, "text": "some saved text"}, ...]
 > 
-> POST /chat/message_templates/
+> POST /chat/message_templates
 > >{"text": "A new template"}
 > 
 > DELETE /chat/message_templates/{id}
